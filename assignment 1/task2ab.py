@@ -61,3 +61,4 @@ def inverse(im):
 im_invert = inverse(im)
 save_im(output_dir.joinpath("duck_invert.jpeg"), im_invert, cmap="gray")
 plt.imshow(im_invert, cmap="gray")
+
