@@ -50,7 +50,11 @@ def inverse(im):
     # width,height, colors = im.shape
     # for w in range(width):
     #     for h in range(height):
-    px = im_greyscale[:]
+    if len(im.shape) == 3:
+        grey = greyscale(im)
+    else:
+        grey = im
+    px = grey[:]
 
             #px=im_greyscale.getpixel((w,h))
             #print(px)
@@ -61,4 +65,5 @@ def inverse(im):
 im_invert = inverse(im)
 save_im(output_dir.joinpath("duck_invert.jpeg"), im_invert, cmap="gray")
 plt.imshow(im_invert, cmap="gray")
+
 

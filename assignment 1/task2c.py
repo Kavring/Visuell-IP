@@ -22,7 +22,56 @@ def convolve_im(im, kernel,
         [type]: [np.array of shape [H, W, 3]. should be same as im]
     """
     assert len(im.shape) == 3
+    assert (kernel.shape[0] % 2) == 1
 
+    k_size = kernel.shape[0]
+    mid = (k_size-1)/2
+    w, h, col = im.shape
+    print(im.shape)
+    kernel = np.flip(kernel)
+    #entering the image
+    
+    R_sum = 0
+    G_sum = 0
+    B_sum = 0
+
+    for i in range(h):
+        for j in range(w):
+
+            #entering the kernel 
+            #sum all values her
+            for k in range(k_size):
+                for l in range(k_size):
+
+                    wi = j - mid + l
+                    hi = i - mid + k
+                    try:
+                        R = im[wi, hi, 0]
+                        G = im[wi, hi, 1]
+                        B = im[wi, hi, 2]
+                    except IndexError:
+                        R, G, B = 0, 0, 0
+                    else:
+                        R = im[wi, hi, 0]
+                        G = im[wi, hi, 1]
+                        B = im[wi, hi, 2]
+
+
+                    #matte her:
+                    #backwards indexing should work as flipping the kernel
+                    
+                    R_sum += R * kernel[l , k] # might have to switch k and l
+                    G_sum += G * kernel[l , k]
+                    B_sum += B * kernel[l , k]
+
+            im[j-1, i-1, 0] = R_sum
+            im[j-1, i-1, 1] = G_sum
+            im[j-1, i-1, 2] = B_sum
+
+            R_sum = 0
+            G_sum = 0
+            B_sum = 0
+    print(im.shape)
     return im
 
 
