@@ -25,26 +25,34 @@ def convolve_im(im, kernel,
     assert (kernel.shape[0] % 2) == 1
 
     k_size = kernel.shape[0]
-    mid = (k_size-1)/2
+    print(f"k_size: {k_size}")
+
+    mid = (k_size-1)//2
+    print(f"mid: {mid}")
     w, h, col = im.shape
     print(im.shape)
+    
     kernel = np.flip(kernel)
     #entering the image
     
-    R_sum = 0
-    G_sum = 0
-    B_sum = 0
+    # R_sum = 0
+    # G_sum = 0
+    # B_sum = 0
+    imcopy = np.copy(im)
 
     for i in range(h):
         for j in range(w):
+            R_sum = 0
+            G_sum = 0
+            B_sum = 0
 
             #entering the kernel 
             #sum all values her
             for k in range(k_size):
                 for l in range(k_size):
 
-                    wi = j - mid + l
-                    hi = i - mid + k
+                    wi = j + l - mid 
+                    hi = i + k - mid
                     try:
                         R = im[wi, hi, 0]
                         G = im[wi, hi, 1]
@@ -63,16 +71,16 @@ def convolve_im(im, kernel,
                     R_sum += R * kernel[l , k] # might have to switch k and l
                     G_sum += G * kernel[l , k]
                     B_sum += B * kernel[l , k]
+            # print(f"Rsum {R_sum}")
+            # print(f"Gsum {G_sum}")
+            # print(f"Bsum {B_sum}")
+            imcopy[j-1, i-1, 0] = R_sum
+            imcopy[j-1, i-1, 1] = G_sum
+            imcopy[j-1, i-1, 2] = B_sum
 
-            im[j-1, i-1, 0] = R_sum
-            im[j-1, i-1, 1] = G_sum
-            im[j-1, i-1, 2] = B_sum
 
-            R_sum = 0
-            G_sum = 0
-            B_sum = 0
-    print(im.shape)
-    return im
+    print(imcopy.shape)
+    return imcopy
 
 
 if __name__ == "__main__":

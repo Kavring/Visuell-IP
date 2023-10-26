@@ -78,16 +78,16 @@ train_loss_dict, test_loss_dict = trainer.train(num_epochs)
 # We can now plot the training loss with our utility script
 
 # Plot loss
-utils.plot_loss(train_loss_dict, label="Train Loss")
-utils.plot_loss(test_loss_dict, label="Test Loss")
-# Limit the y-axis of the plot (The range should not be increased!)
-plt.ylim([0, 1])
-plt.legend()
-plt.xlabel("Global Training Step")
-plt.ylabel("Cross Entropy Loss")
-plt.savefig("image_solutions/task_4a.png")
+# utils.plot_loss(train_loss_dict, label="Train Loss")
+# utils.plot_loss(test_loss_dict, label="Test Loss")
+# # Limit the y-axis of the plot (The range should not be increased!)
+# plt.ylim([0, 1])
+# plt.legend()
+# plt.xlabel("Global Training Step")
+# plt.ylabel("Cross Entropy Loss")
+# plt.savefig("image_solutions/task_4a.png")
 
-plt.show()
+# plt.show()
 
 torch.save(model.state_dict(), "saved_model.torch")
 final_loss, final_acc = utils.compute_loss_and_accuracy(
@@ -105,13 +105,27 @@ print(f"Final Test loss: {final_loss}. Final Test accuracy: {final_acc}")
 torch.random.manual_seed(0)
 np.random.seed(0)
 
+#####task 1, normalize the values:
+image_transform = torchvision.transforms.Compose([
+    torchvision.transforms.ToTensor(),
+    torchvision.transforms.Normalize(mean= 0.5, std= 0.5),
+])
+
+
 
 dataloader_train, dataloader_test = dataloaders.load_dataset(
     batch_size, image_transform)
 model = create_model()
 
+
+####
+
+
+####
+
+
 learning_rate = .0192
-num_epochs = 6
+num_epochs = 5
 
 # Redefine optimizer, as we have a new model.
 optimizer = torch.optim.SGD(model.parameters(),
@@ -127,15 +141,20 @@ trainer = Trainer(
 train_loss_dict_6epochs, test_loss_dict_6epochs = trainer.train(num_epochs)
 num_epochs = 5
 
+#get the weights:
+weight = list(model.children())[1].weight.cpu().data
+print(f" weight shape: {weight.size()}")
+
 
 # We can now plot the two models against eachother
 
 # Plot loss
 utils.plot_loss(train_loss_dict_6epochs,
-                label="Train Loss - Model trained with 6 epochs")
-utils.plot_loss(test_loss_dict_6epochs,
-                label="Test Loss - Model trained with 6 epochs")
+                label="Train Loss - Model trained with normalized values")
 utils.plot_loss(train_loss_dict, label="Train Loss - Original model")
+
+utils.plot_loss(test_loss_dict_6epochs,
+                label="Test Loss - Model trained with normalized values")
 utils.plot_loss(test_loss_dict, label="Test Loss - Original model")
 # Limit the y-axis of the plot (The range should not be increased!)
 plt.ylim([0, 1])
