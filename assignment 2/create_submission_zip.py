@@ -30,7 +30,7 @@ files_to_include = {
     "trainer": [".py"],
     "dataloaders": [".py"]
 }
-zipfile_path = "assignment_code.zip"
+zipfile_path = "assignment2_code.zip"
 print("-"*80)
 
 
