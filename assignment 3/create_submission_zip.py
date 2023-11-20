@@ -28,7 +28,7 @@ files_to_include = {
     "task3d": [".py", ".ipynb"],
     "utils": [".py"],
 }
-zipfile_path = "assignment_code.zip"
+zipfile_path = "assignment3_code.zip"
 print("-"*80)
 
 
